@@ -6,6 +6,8 @@ import 'package:collection/collection.dart';
 import 'utils/generic_day.dart';
 
 /// List holding all the solution classes.
+///
+/// Add your day's solution here.
 final days = <GenericDay>[];
 
 void main(List<String?> args) {
