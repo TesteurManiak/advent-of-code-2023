@@ -5,6 +5,10 @@ import 'package:meta/meta.dart';
 /// Automatically reads reads the contents of the input file for given [day]. \
 /// Note that file name and location must align.
 class InputUtil {
+  InputUtil(int day)
+      : _inputAsString = _readInputDay(day),
+        _inputAsList = _readInputDayAsList(day);
+
   String _inputAsString;
 
   @visibleForTesting
@@ -14,10 +18,6 @@ class InputUtil {
 
   @visibleForTesting
   set inputAsList(List<String> input) => _inputAsList = input;
-
-  InputUtil(int day)
-      : _inputAsString = _readInputDay(day),
-        _inputAsList = _readInputDayAsList(day);
 
   static String _createInputPath(int day) {
     final dayString = day.toString().padLeft(2, '0');

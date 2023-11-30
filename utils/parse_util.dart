@@ -1,4 +1,6 @@
 class ParseUtil {
+  const ParseUtil._();
+
   /// Throws an exception if any given String is not parseable.
   static List<int> stringListToIntList(List<String> strings) {
     return strings.map(int.parse).toList();

@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:quiver/iterables.dart';
-import 'package:tuple/tuple.dart';
 
 typedef VoidFieldCallback = void Function(int x, int y);
 
@@ -26,7 +25,7 @@ class Field<T> {
   T getValueAtPosition(Position position) => field[position.y][position.x];
 
   /// Returns the value at the given coordinates.
-  T getValueAt(int x, int y) => getValueAtPosition(Position(x, y));
+  T getValueAt(int x, int y) => getValueAtPosition((x: x, y: y));
 
   /// Sets the value at the given Position.
   T setValueAtPosition(Position position, T value) =>
@@ -34,7 +33,7 @@ class Field<T> {
 
   /// Sets the value at the given coordinates.
   T setValueAt(int x, int y, T value) =>
-      setValueAtPosition(Position(x, y), value);
+      setValueAtPosition((x: x, y: y), value);
 
   /// Returns whether the given position is inside of this field.
   bool isOnField(Position position) =>
@@ -60,7 +59,7 @@ class Field<T> {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         if (predicate(field[y][x])) {
-          yield Position(x, y);
+          yield (x: x, y: y);
         }
       }
     }
@@ -94,10 +93,10 @@ class Field<T> {
   /// diagonal neighbours.
   Iterable<Position> adjacent(int x, int y) {
     return <Position>{
-      Position(x, y - 1),
-      Position(x, y + 1),
-      Position(x - 1, y),
-      Position(x + 1, y),
+      (x: x, y: y - 1),
+      (x: x, y: y + 1),
+      (x: x - 1, y: y),
+      (x: x + 1, y: y),
     }..removeWhere(
         (pos) => pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height,
       );
@@ -108,14 +107,14 @@ class Field<T> {
   Iterable<Position> neighbours(int x, int y) {
     return <Position>{
       // positions are added in a circle, starting at the top middle
-      Position(x, y - 1),
-      Position(x + 1, y - 1),
-      Position(x + 1, y),
-      Position(x + 1, y + 1),
-      Position(x, y + 1),
-      Position(x - 1, y + 1),
-      Position(x - 1, y),
-      Position(x - 1, y - 1),
+      (x: x, y: y - 1),
+      (x: x + 1, y: y - 1),
+      (x: x + 1, y: y),
+      (x: x + 1, y: y + 1),
+      (x: x, y: y + 1),
+      (x: x - 1, y: y + 1),
+      (x: x - 1, y: y),
+      (x: x - 1, y: y - 1),
     }..removeWhere(
         (pos) => pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height,
       );
@@ -161,17 +160,11 @@ extension IntegerField on Field<int> {
   }
 }
 
-class Position extends Tuple2<int, int> {
-  const Position(super.x, super.y);
+typedef Position = ({int x, int y});
 
-  int get x => item1;
-  int get y => item2;
-
-  Position operator -(Position other) => Position(x - other.x, y - other.y);
-  Position operator +(Position other) => Position(x + other.x, y + other.y);
-
-  @override
-  String toString() => '($x, $y)';
+extension PositionExt on Position {
+  Position operator -(Position other) => (x: x - other.x, y: y - other.y);
+  Position operator +(Position other) => (x: x + other.x, y: y + other.y);
 }
 
 class Segment {
@@ -194,7 +187,7 @@ class Segment {
     for (int i = 0; i <= steps; i++) {
       final x = start.x + (i * xDir * xSteps ~/ steps);
       final y = start.y + (i * yDir * ySteps ~/ steps);
-      points.add(Position(x, y));
+      points.add((x: x, y: y));
     }
     return points;
   }
