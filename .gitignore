@@ -2,5 +2,3 @@
 .dart_tool
 .dart_tool/package_config.json
 .packages
-
-day_generator.dart
