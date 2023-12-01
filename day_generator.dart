@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 /// Call with `dart run day_generator.dart <day>`
 Future<void> main(List<String?> args) async {
   const session =
-      '53616c7465645f5fbaa4b5351d60110dd4c7a466cfd7b671d03b77d110ef2c634f5b2188afbf39a852d3c7d6944bb2edd4b9f556b13760f7129045fdd68e637c';
+      '53616c7465645f5f0d7c38d265133c8cf5621617f2649ec7fddade12d191aa00ff36f39ba33696b868977aa9ab92981dfb7f93f77a9a848abed2b6c4fa84da98';
 
   final parser = ArgParser()
     ..addSeparator('Usage: dart day_generator.dart <day> [options] [flags]')
