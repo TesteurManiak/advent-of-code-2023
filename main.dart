@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:collection/collection.dart';
 
+import 'solutions/index.dart';
 import 'utils/generic_day.dart';
 
 /// List holding all the solution classes.
 ///
 /// Add your day's solution here.
-final days = <GenericDay>[];
+final days = <GenericDay>[
+  Day01(),
+];
 
 void main(List<String?> args) {
   final parser = ArgParser()
