@@ -1,7 +1,6 @@
 import '../utils/index.dart';
 
 typedef Day03ParseRecord = ({Set<String> symbols, Field<String> map});
-typedef _PositionRecord = ({Position start, Position end});
 
 class Day03 extends GenericDay {
   Day03() : super(3);
@@ -22,8 +21,8 @@ class Day03 extends GenericDay {
     return (symbols: symbols, map: map);
   }
 
-  Map<_PositionRecord, int> _buildNumberMap(Day03ParseRecord input) {
-    final numberMap = <_PositionRecord, int>{};
+  Map<Segment, int> _buildNumberMap(Day03ParseRecord input) {
+    final numberMap = <Segment, int>{};
     final regex = RegExp(r'\d+');
 
     for (int i = 0; i < input.map.height; i++) {

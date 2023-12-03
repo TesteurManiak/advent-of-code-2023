@@ -158,12 +158,9 @@ extension PositionExt on Position {
   Position operator +(Position other) => (x: x + other.x, y: y + other.y);
 }
 
-class Segment {
-  const Segment(this.start, this.end);
+typedef Segment = ({Position start, Position end});
 
-  final Position start;
-  final Position end;
-
+extension SegmentExt on Segment {
   /// Return all the points between start and end.
   Set<Position> get points {
     final points = <Position>{};
@@ -182,7 +179,4 @@ class Segment {
     }
     return points;
   }
-
-  @override
-  String toString() => '$start -> $end';
 }
