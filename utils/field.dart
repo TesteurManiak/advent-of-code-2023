@@ -120,6 +120,10 @@ class Field<T> {
       );
   }
 
+  Iterable<Position> neighboursFromPosition(Position position) {
+    return neighbours(position.x, position.y);
+  }
+
   /// Returns a deep copy by value of this [Field].
   Field<T> copy() {
     final newField = List<List<T>>.generate(
