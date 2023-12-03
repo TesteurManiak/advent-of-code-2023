@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:quiver/iterables.dart';
 
-typedef VoidFieldCallback = void Function(int x, int y);
+typedef VoidFieldCallback = void Function(Position pos);
 
 /// A helper class for easier work with 2D data.
 class Field<T> {
@@ -55,7 +55,7 @@ class Field<T> {
   void forEach(VoidFieldCallback callback) {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        callback(x, y);
+        callback((x: x, y: y));
       }
     }
   }
@@ -71,7 +71,7 @@ class Field<T> {
     VoidFieldCallback callback,
   ) {
     for (final position in positions) {
-      callback(position.x, position.y);
+      callback(position);
     }
   }
 
