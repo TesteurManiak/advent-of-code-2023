@@ -24,6 +24,7 @@ class Day03 extends GenericDay {
 
   Map<_PositionRecord, int> _buildNumberMap(Day03ParseRecord input) {
     final numberMap = <_PositionRecord, int>{};
+    final regex = RegExp(r'\d+');
 
     for (int i = 0; i < input.map.height; i++) {
       final row = input.map.getRow(i);
@@ -36,8 +37,6 @@ class Day03 extends GenericDay {
 
     return numberMap;
   }
-
-  static final regex = RegExp(r'\d+');
 
   @override
   int solvePart1() {
