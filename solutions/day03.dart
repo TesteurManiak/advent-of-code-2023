@@ -85,14 +85,14 @@ class Day03 extends GenericDay {
 extension on Field<String> {
   bool checkSymbol(Position pos, Set<String> symbols) {
     return neighboursFromPosition(pos).any(
-      (e) => symbols.contains(getValueAtPosition(e)),
+      (e) => symbols.contains(this[e]),
     );
   }
 
   Position? getGearFromPosition(Position pos) {
     final neighbours = neighboursFromPosition(pos);
     for (final n in neighbours) {
-      if (getValueAtPosition(n) == '*') return n;
+      if (this[n] == '*') return n;
     }
     return null;
   }

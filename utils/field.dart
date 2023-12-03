@@ -21,20 +21,6 @@ class Field<T> {
   late final int height;
   late final int width;
 
-  /// Returns the value at the given position.
-  T getValueAtPosition(Position position) => field[position.y][position.x];
-
-  /// Returns the value at the given coordinates.
-  T getValueAt(int x, int y) => getValueAtPosition((x: x, y: y));
-
-  /// Sets the value at the given Position.
-  T setValueAtPosition(Position position, T value) =>
-      field[position.y][position.x] = value;
-
-  /// Sets the value at the given coordinates.
-  T setValueAt(int x, int y, T value) =>
-      setValueAtPosition((x: x, y: y), value);
-
   /// Returns whether the given position is inside of this field.
   bool isOnField(Position position) =>
       position.x >= 0 &&
@@ -144,14 +130,15 @@ class Field<T> {
     }
     return sb.toString();
   }
+
+  T operator [](Position pos) => field[pos.y][pos.x];
+  void operator []=(Position pos, T value) => field[pos.y][pos.x] = value;
 }
 
 /// Extension for [Field]s where [T] is of type [int].
 extension IntegerField on Field<int> {
   /// Increments the values of Position `x` `y`.
-  int increment(int x, int y) {
-    return setValueAt(x, y, getValueAt(x, y) + 1);
-  }
+  int increment(int x, int y) => this[(x: x, y: y)] += 1;
 
   /// Convenience method to create a Field from a single String, where the
   /// String is a "block" of integers.
