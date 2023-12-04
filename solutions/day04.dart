@@ -6,10 +6,7 @@ class Day04 extends GenericDay {
   Day04() : super(4);
 
   @override
-  Iterable<Day03Card> parseInput({
-    bool debug = false,
-    bool part2 = false,
-  }) sync* {
+  Iterable<Day03Card> parseInput() sync* {
     final lines = input.getPerLine();
 
     for (final line in lines) {
@@ -25,16 +22,13 @@ class Day04 extends GenericDay {
           .map(int.parse)
           .toSet();
 
-      yield (
-        winningNumbers: winningNumbers,
-        givenNumbers: givenNumbers,
-      );
+      yield (winningNumbers: winningNumbers, givenNumbers: givenNumbers);
     }
   }
 
   @override
   int solvePart1() {
-    final cards = parseInput(debug: true);
+    final cards = parseInput();
     int sum = 0;
     for (final card in cards) {
       final winningNumbers = card.winningNumbers;
