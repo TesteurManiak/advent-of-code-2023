@@ -27,6 +27,14 @@ void main(List<String?> args) {
       valueHelp: 'day',
       help: 'Show solutions for a specific day',
     )
+    ..addOption(
+      'part',
+      abbr: 'p',
+      defaultsTo: DayPart.all.name,
+      valueHelp: 'part',
+      help: 'Show solution for a specific part',
+      allowed: DayPart.values.map((e) => e.value).toList(),
+    )
     ..addSeparator('Flags:')
     ..addFlag(
       'all',
@@ -39,13 +47,14 @@ void main(List<String?> args) {
 
   final results = parser.parse(args.whereType<String>());
   final day = results['day'] as String;
+  final part = DayPart.parse(results['part'] as String);
 
   if (results.wasParsed('help')) {
     print(parser.usage);
     exit(0);
   }
 
-  printSolutionForDay(int.parse(day));
+  printSolutionForDay(int.parse(day), part);
 }
 
 void printAllSolution({required bool enabled}) {
@@ -57,11 +66,11 @@ void printAllSolution({required bool enabled}) {
   }
 }
 
-void printSolutionForDay(int day) {
+void printSolutionForDay(int day, DayPart part) {
   final daySolution = days.firstWhereOrNull((e) => e.day == day);
   if (daySolution == null) {
     print('No solution found for day $day');
   } else {
-    daySolution.printSolutions();
+    daySolution.printSolutions(part: part);
   }
 }
