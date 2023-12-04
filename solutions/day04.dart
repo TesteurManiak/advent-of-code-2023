@@ -56,12 +56,12 @@ class Day04 extends GenericDay {
       final length = winningNumbers.intersection(givenNumbers).length + 1;
 
       for (int nextIndex = 1; nextIndex < length; nextIndex++) {
+        final i = index + nextIndex;
         // Check if nextIndex is not outside the bounds of the cards list.
-        if (index + nextIndex >= cards.length) break;
+        if (i >= cards.length) break;
 
         // Increment the card count of the next card.
-        obtainedScratchCards[index + nextIndex] =
-            (obtainedScratchCards[index + nextIndex] ?? 0) + cardCount;
+        obtainedScratchCards[i] = (obtainedScratchCards[i] ?? 0) + cardCount;
       }
     }
 
