@@ -41,11 +41,12 @@ class Day04 extends GenericDay {
 
   @override
   int solvePart2() {
-    final winningNumbers = parseInput();
+    final winningNumbers = parseInput().toList();
     final obtainedScratchCards = <int, int>{};
     int sum = 0;
 
-    for (final (index, numbers) in winningNumbers.indexed) {
+    for (int index = 0; index < winningNumbers.length; index++) {
+      final numbers = winningNumbers[index];
       // Default card count is 1, since we always get the first card.
       final cardCount = (obtainedScratchCards[index] ?? 0) + 1;
       sum += cardCount;
