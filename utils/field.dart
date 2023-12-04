@@ -152,13 +152,12 @@ extension IntegerField on Field<int> {
 }
 
 typedef Position = ({int x, int y});
+typedef Segment = ({Position start, Position end});
 
 extension PositionExt on Position {
   Position operator -(Position other) => (x: x - other.x, y: y - other.y);
   Position operator +(Position other) => (x: x + other.x, y: y + other.y);
 }
-
-typedef Segment = ({Position start, Position end});
 
 extension SegmentExt on Segment {
   /// Return all the points between start and end.
