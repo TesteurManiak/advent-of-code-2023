@@ -45,27 +45,27 @@ class Day04 extends GenericDay {
   int solvePart2() {
     final cards = parseInput();
     final obtainedScratchCards = <int, int>{};
+    int sum = 0;
 
     for (final (index, card) in cards.indexed) {
       // Default card count is 1, since we always get the first card.
       final cardCount = (obtainedScratchCards[index] ?? 0) + 1;
-      obtainedScratchCards[index] = cardCount;
+      sum += cardCount;
 
       final winningNumbers = card.winningNumbers;
       final givenNumbers = card.givenNumbers;
-      final length = winningNumbers.intersection(givenNumbers).length + 1;
+      final length =
+          (index + winningNumbers.intersection(givenNumbers).length + 1)
+              .clamp(0, cards.length);
 
-      for (int nextIndex = 1; nextIndex < length; nextIndex++) {
-        final i = index + nextIndex;
-        // Check if nextIndex is not outside the bounds of the cards list.
-        if (i >= cards.length) break;
-
+      for (int nextIndex = index + 1; nextIndex < length; nextIndex++) {
         // Increment the card count of the next card.
-        obtainedScratchCards[i] = (obtainedScratchCards[i] ?? 0) + cardCount;
+        obtainedScratchCards[nextIndex] =
+            (obtainedScratchCards[nextIndex] ?? 0) + cardCount;
       }
     }
 
-    return obtainedScratchCards.values.sum;
+    return sum;
   }
 }
 
