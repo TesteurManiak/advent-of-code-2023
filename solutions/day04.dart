@@ -6,7 +6,7 @@ class Day04 extends GenericDay {
   Day04() : super(4);
 
   @override
-  Iterable<_Card> parseInput() sync* {
+  Iterable<Set<int>> parseInput() sync* {
     final lines = input.getPerLine();
 
     for (final line in lines) {
@@ -22,41 +22,36 @@ class Day04 extends GenericDay {
           .map(int.parse)
           .toSet();
 
-      yield (winningNumbers: winningNumbers, givenNumbers: givenNumbers);
+      yield winningNumbers.intersection(givenNumbers);
     }
   }
 
   @override
   int solvePart1() {
-    final cards = parseInput();
-    int sum = 0;
-    for (final card in cards) {
-      final winningNumbers = card.winningNumbers;
-      final givenNumbers = card.givenNumbers;
-      final intersection = winningNumbers.intersection(givenNumbers);
-      if (intersection.isNotEmpty) {
-        sum += math.pow(2, intersection.length - 1).toInt();
+    final winningNumbers = parseInput();
+    num sum = 0;
+    for (final numbers in winningNumbers) {
+      if (numbers.isNotEmpty) {
+        sum += math.pow(2, numbers.length - 1);
       }
     }
-    return sum;
+
+    return sum.toInt();
   }
 
   @override
   int solvePart2() {
-    final cards = parseInput();
+    final winningNumbers = parseInput();
     final obtainedScratchCards = <int, int>{};
     int sum = 0;
 
-    for (final (index, card) in cards.indexed) {
+    for (final (index, numbers) in winningNumbers.indexed) {
       // Default card count is 1, since we always get the first card.
       final cardCount = (obtainedScratchCards[index] ?? 0) + 1;
       sum += cardCount;
 
-      final winningNumbers = card.winningNumbers;
-      final givenNumbers = card.givenNumbers;
       final length =
-          (index + winningNumbers.intersection(givenNumbers).length + 1)
-              .clamp(0, cards.length);
+          (index + numbers.length + 1).clamp(0, winningNumbers.length);
 
       for (int nextIndex = index + 1; nextIndex < length; nextIndex++) {
         // Increment the card count of the next card.
@@ -68,5 +63,3 @@ class Day04 extends GenericDay {
     return sum;
   }
 }
-
-typedef _Card = ({Set<int> winningNumbers, Set<int> givenNumbers});
