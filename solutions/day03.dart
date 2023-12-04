@@ -1,12 +1,12 @@
 import '../utils/index.dart';
 
-typedef Day03ParseRecord = ({Set<String> symbols, Field<String> map});
+typedef _ParseRecord = ({Set<String> symbols, Field<String> map});
 
 class Day03 extends GenericDay {
   Day03() : super(3);
 
   @override
-  Day03ParseRecord parseInput({bool debug = false, bool part2 = false}) {
+  _ParseRecord parseInput({bool debug = false, bool part2 = false}) {
     final parsedInput = input.asString;
     final symbols = parsedInput
         .replaceAll('.', '')
@@ -21,7 +21,7 @@ class Day03 extends GenericDay {
     return (symbols: symbols, map: map);
   }
 
-  Map<Segment, int> _buildNumberMap(Day03ParseRecord input) {
+  Map<Segment, int> _buildNumberMap(_ParseRecord input) {
     final numberMap = <Segment, int>{};
     final regex = RegExp(r'\d+');
 

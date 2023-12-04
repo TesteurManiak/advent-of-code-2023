@@ -6,9 +6,9 @@ class Day02 extends GenericDay {
   Day02() : super(2);
 
   @override
-  List<Day02Game> parseInput({bool debug = false, bool part2 = false}) {
+  List<_Game> parseInput({bool debug = false, bool part2 = false}) {
     final lines = input.getPerLine();
-    return lines.map(Day02Game.fromLine).toList();
+    return lines.map(_Game.fromLine).toList();
   }
 
   @override
@@ -35,15 +35,15 @@ class Day02 extends GenericDay {
   }
 }
 
-class Day02Game {
-  const Day02Game({
+class _Game {
+  const _Game({
     required this.id,
     required this.maxBlue,
     required this.maxRed,
     required this.maxGreen,
   });
 
-  factory Day02Game.fromLine(String line) {
+  factory _Game.fromLine(String line) {
     final parts = line.split(': ');
     final id = int.parse(parts[0].replaceFirst('Game ', ''));
     final subsets = parts[1].split('; ');
@@ -69,7 +69,7 @@ class Day02Game {
       }
     }
 
-    return Day02Game(
+    return _Game(
       id: id,
       maxBlue: maxBlue,
       maxRed: maxRed,

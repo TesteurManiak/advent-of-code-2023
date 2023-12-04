@@ -6,7 +6,7 @@ class Day04 extends GenericDay {
   Day04() : super(4);
 
   @override
-  Iterable<Day03Card> parseInput() sync* {
+  Iterable<_Card> parseInput() sync* {
     final lines = input.getPerLine();
 
     for (final line in lines) {
@@ -69,4 +69,4 @@ class Day04 extends GenericDay {
   }
 }
 
-typedef Day03Card = ({Set<int> winningNumbers, Set<int> givenNumbers});
+typedef _Card = ({Set<int> winningNumbers, Set<int> givenNumbers});
