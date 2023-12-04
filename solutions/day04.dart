@@ -53,11 +53,9 @@ class Day04 extends GenericDay {
 
       final winningNumbers = card.winningNumbers;
       final givenNumbers = card.givenNumbers;
-      final intersection = winningNumbers.intersection(givenNumbers);
+      final length = winningNumbers.intersection(givenNumbers).length + 1;
 
-      for (int nextIndex = 1;
-          nextIndex < intersection.length + 1;
-          nextIndex++) {
+      for (int nextIndex = 1; nextIndex < length; nextIndex++) {
         // Check if nextIndex is not outside the bounds of the cards list.
         if (index + nextIndex >= cards.length) break;
 
