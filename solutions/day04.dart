@@ -11,16 +11,11 @@ class Day04 extends GenericDay {
 
     for (final line in lines) {
       final parts = line.split(': ')[1].split(' | ');
-      final winningNumbers = parts[0]
-          .split(' ')
-          .where((e) => e.trim().isNotEmpty)
-          .map(int.parse)
-          .toSet();
-      final givenNumbers = parts[1]
-          .split(' ')
-          .where((e) => e.trim().isNotEmpty)
-          .map(int.parse)
-          .toSet();
+      final regex = RegExp(r'\d+');
+      final winningNumbers =
+          regex.allMatches(parts[0]).map((e) => int.parse(e.group(0)!)).toSet();
+      final givenNumbers =
+          regex.allMatches(parts[1]).map((e) => int.parse(e.group(0)!)).toSet();
 
       yield winningNumbers.intersection(givenNumbers);
     }
