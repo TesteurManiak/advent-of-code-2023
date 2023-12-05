@@ -86,17 +86,23 @@ class Day05 extends GenericDay {
   @override
   int solvePart2() {
     final parsedInput = parseInput();
-    final seeds = <int>[];
+    final seedRanges = <({int startSeed, int endSeed})>[
+      for (int i = 0; i < parsedInput.seeds.length; i += 2)
+        (
+          startSeed: parsedInput.seeds.elementAt(i),
+          endSeed: parsedInput.seeds.elementAt(i) +
+              parsedInput.seeds.elementAt(i + 1)
+        ),
+    ];
 
-    for (int index = 0; index < parsedInput.seeds.length; index += 2) {
-      final start = parsedInput.seeds.elementAt(index);
-      final length = parsedInput.seeds.elementAt(index + 1);
-      for (int seed = start; seed < start + length; seed++) {
-        seeds.add(seed);
+    int location = 0;
+    while (true) {
+      final seed = parsedInput.locationToSeed(location);
+      if (seedRanges.any((e) => seed >= e.startSeed && seed < e.endSeed)) {
+        return location;
       }
+      location++;
     }
-
-    return seeds.map(parsedInput.seedToLocation).min;
   }
 }
 
@@ -122,40 +128,41 @@ class _SeedMap {
   final List<_SeedLine> humidityToLocationMap;
 
   int seedToLocation(int seed) {
-    final soil = seedToSoil(seed);
-    final fertilizer = soilToFertilizer(soil);
-    final water = fertilizerToWater(fertilizer);
-    final light = waterToLight(water);
-    final temperature = lightToTemperature(light);
-    final humidity = temperatureToHumidity(temperature);
-    final location = humidityToLocation(humidity);
+    final soil = sourceToDest(seed, seedToSoilMap);
+    final fertilizer = sourceToDest(soil, soilToFertilizerMap);
+    final water = sourceToDest(fertilizer, fertilizerToWaterMap);
+    final light = sourceToDest(water, waterToLightMap);
+    final temperature = sourceToDest(light, lightToTemperatureMap);
+    final humidity = sourceToDest(temperature, temperatureToHumidityMap);
+    final location = sourceToDest(humidity, humidityToLocationMap);
 
     return location;
   }
 
-  int seedToSoil(int seed) => sourceToDest(seed, seedToSoilMap);
+  int locationToSeed(int location) {
+    final humidity = destToSource(location, humidityToLocationMap);
+    final temperature = destToSource(humidity, temperatureToHumidityMap);
+    final light = destToSource(temperature, lightToTemperatureMap);
+    final water = destToSource(light, waterToLightMap);
+    final fertilizer = destToSource(water, fertilizerToWaterMap);
+    final soil = destToSource(fertilizer, soilToFertilizerMap);
+    final seed = destToSource(soil, seedToSoilMap);
 
-  int soilToFertilizer(int soil) => sourceToDest(soil, soilToFertilizerMap);
-
-  int fertilizerToWater(int fertilizer) =>
-      sourceToDest(fertilizer, fertilizerToWaterMap);
-
-  int waterToLight(int water) => sourceToDest(water, waterToLightMap);
-
-  int lightToTemperature(int light) =>
-      sourceToDest(light, lightToTemperatureMap);
-
-  int temperatureToHumidity(int temperature) =>
-      sourceToDest(temperature, temperatureToHumidityMap);
-
-  int humidityToLocation(int humidity) =>
-      sourceToDest(humidity, humidityToLocationMap);
+    return seed;
+  }
 
   int sourceToDest(int source, List<_SeedLine> destMap) {
     return destMap
             .firstWhereOrNull((e) => e.containsSource(source))
             ?.sourceToDest(source) ??
         source;
+  }
+
+  int destToSource(int dest, List<_SeedLine> sourceMap) {
+    return sourceMap
+            .firstWhereOrNull((e) => e.containsDest(dest))
+            ?.destToSource(dest) ??
+        dest;
   }
 }
 
@@ -186,5 +193,14 @@ class _SeedLine {
 
   int sourceToDest(int source) {
     return source - sourceRangeStart + destinationRangeStart;
+  }
+
+  bool containsDest(int dest) {
+    return dest >= destinationRangeStart &&
+        dest < destinationRangeStart + rangeLength;
+  }
+
+  int destToSource(int dest) {
+    return dest - destinationRangeStart + sourceRangeStart;
   }
 }
