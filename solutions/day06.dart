@@ -45,11 +45,9 @@ class Day06 extends GenericDay {
 
     int total = 1;
     for (final race in input.values) {
-      // Find the number of ways you can complete the race's distance
       int ways = 0;
       for (int hold = 1; hold < race.time; hold++) {
-        final remaningTime = race.time - hold;
-        final runDistance = hold * remaningTime;
+        final runDistance = calcDistance(hold, race.time);
         if (runDistance > race.distance) {
           ways++;
         }
@@ -64,12 +62,11 @@ class Day06 extends GenericDay {
   int solvePart2() {
     final input = parseInput(part2: true).values.first;
 
-    int startingEdge = 0;
+    int startingEdge = 1;
     int endingEdge = input.time - 1;
 
     for (int hold = 1; hold < input.time; hold++) {
-      final remaningTime = input.time - hold;
-      final runDistance = hold * remaningTime;
+      final runDistance = calcDistance(hold, input.time);
       if (runDistance > input.distance) {
         startingEdge = hold;
         break;
@@ -77,8 +74,7 @@ class Day06 extends GenericDay {
     }
 
     for (int hold = input.time - 1; hold > 0; hold--) {
-      final remaningTime = input.time - hold;
-      final runDistance = hold * remaningTime;
+      final runDistance = calcDistance(hold, input.time);
       if (runDistance > input.distance) {
         endingEdge = hold;
         break;
@@ -86,6 +82,11 @@ class Day06 extends GenericDay {
     }
 
     return endingEdge - startingEdge + 1;
+  }
+
+  int calcDistance(int hold, int time) {
+    final remaningTime = time - hold;
+    return hold * remaningTime;
   }
 }
 
