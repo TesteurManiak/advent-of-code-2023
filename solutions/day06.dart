@@ -4,7 +4,7 @@ class Day06 extends GenericDay {
   Day06() : super(6);
 
   @override
-  Map<int, _TimeDistancePair> parseInput({
+  List<_TimeDistancePair> parseInput({
     bool debug = false,
     bool part2 = false,
   }) {
@@ -21,7 +21,7 @@ class Day06 extends GenericDay {
           .allMatches(lines[1].replaceAll(headerRegex, ''))
           .map((e) => e.group(0)!)
           .join();
-      return {0: (time: int.parse(time), distance: int.parse(distance))};
+      return [(time: int.parse(time), distance: int.parse(distance))];
     }
 
     final times = numberRegex
@@ -31,12 +31,12 @@ class Day06 extends GenericDay {
         .allMatches(lines[1].replaceAll(headerRegex, ''))
         .map((e) => int.parse(e.group(0)!));
 
-    final map = <int, _TimeDistancePair>{};
+    final pairs = <_TimeDistancePair>[];
     for (int i = 0; i < times.length; i++) {
-      map[i] = (time: times.elementAt(i), distance: distances.elementAt(i));
+      pairs.add((time: times.elementAt(i), distance: distances.elementAt(i)));
     }
 
-    return map;
+    return pairs;
   }
 
   @override
@@ -44,7 +44,7 @@ class Day06 extends GenericDay {
     final input = parseInput();
 
     int total = 1;
-    for (final race in input.values) {
+    for (final race in input) {
       int ways = 0;
       for (int hold = 1; hold < race.time; hold++) {
         final runDistance = calcDistance(hold, race.time);
@@ -60,11 +60,9 @@ class Day06 extends GenericDay {
 
   @override
   int solvePart2() {
-    final input = parseInput(part2: true).values.first;
+    final input = parseInput(part2: true).first;
 
     int startingEdge = 1;
-    int endingEdge = input.time - 1;
-
     for (int hold = 1; hold < input.time; hold++) {
       final runDistance = calcDistance(hold, input.time);
       if (runDistance > input.distance) {
@@ -73,6 +71,7 @@ class Day06 extends GenericDay {
       }
     }
 
+    int endingEdge = input.time - 1;
     for (int hold = input.time - 1; hold > 0; hold--) {
       final runDistance = calcDistance(hold, input.time);
       if (runDistance > input.distance) {
@@ -84,10 +83,7 @@ class Day06 extends GenericDay {
     return endingEdge - startingEdge + 1;
   }
 
-  int calcDistance(int hold, int time) {
-    final remaningTime = time - hold;
-    return hold * remaningTime;
-  }
+  int calcDistance(int hold, int time) => hold * (time - hold);
 }
 
 typedef _TimeDistancePair = ({int time, int distance});
