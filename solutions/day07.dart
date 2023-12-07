@@ -19,49 +19,39 @@ class Day07 extends GenericDay {
 
   @override
   int solvePart1() {
-    final hands = parseInput().toList()..sort(_sortHand);
-
-    int sum = 0;
-    for (int i = 0; i < hands.length; i++) {
-      final rank = i + 1;
-      sum += rank * hands[i].bid;
-    }
-
-    return sum;
+    final hands = parseInput().toList();
+    return _calcTotal(hands);
   }
 
   @override
   int solvePart2() {
-    final hands = parseInput(part2: true).toList()..sort(_sortHand);
-
-    int sum = 0;
-    for (int i = 0; i < hands.length; i++) {
-      final rank = i + 1;
-      sum += rank * hands[i].bid;
-    }
-    return sum;
+    final hands = parseInput(part2: true).toList();
+    return _calcTotal(hands);
   }
 
   int _sortHand(_Hand a, _Hand b) {
     final typeDiff = b.type.index.compareTo(a.type.index);
-    if (typeDiff != 0) {
-      return typeDiff;
-    }
-    for (var i = 0; i < a.hand.length; i++) {
+    if (typeDiff != 0) return typeDiff;
+
+    for (int i = 0; i < a.hand.length; i++) {
       final cardDiff = a.hand[i].value.compareTo(b.hand[i].value);
-      if (cardDiff != 0) {
-        return cardDiff;
-      }
+      if (cardDiff != 0) return cardDiff;
     }
     return 0;
   }
+
+  int _calcTotal(List<_Hand> hands) {
+    final sorted = hands..sort(_sortHand);
+    int sum = 0;
+    for (int i = 0; i < sorted.length; i++) {
+      final rank = i + 1;
+      sum += rank * sorted[i].bid;
+    }
+    return sum;
+  }
 }
 
-typedef _Hand = ({
-  List<_CamelCard> hand,
-  _HandType type,
-  int bid,
-});
+typedef _Hand = ({List<_CamelCard> hand, _HandType type, int bid});
 
 enum _HandType {
   fiveOfAKind,
@@ -73,67 +63,62 @@ enum _HandType {
   highCard;
 
   factory _HandType.parse(List<_CamelCard> hand) {
-    try {
-      final counts = <int, int>{};
-      for (final card in hand) {
-        counts[card.value] = (counts[card.value] ?? 0) + 1;
-      }
-      final sorted = counts.entries.toList()..sort((a, b) => b.value - a.value);
-      final first = sorted.first;
-      final second = sorted.length > 1 ? sorted[1] : null;
+    final counts = <int, int>{};
+    for (final card in hand) {
+      counts[card.value] = (counts[card.value] ?? 0) + 1;
+    }
+    final sorted = counts.entries.toList()..sort((a, b) => b.value - a.value);
+    final first = sorted.first;
+    final second = sorted.length > 1 ? sorted[1] : null;
 
-      final jokers = counts[_CamelCard.joker.value] ?? 0;
-      switch (jokers) {
-        // Five of a kind cases
-        case 5:
-        case 4:
-        case 3 when second?.value == 2:
-        case 2 when first.value == 3:
-        case 1 when first.value == 4:
-          return _HandType.fiveOfAKind;
-        // Four of a kind cases
-        case 3 when second?.value == 1:
-        case 2 when first.value == 2 && first.key != _CamelCard.joker.value:
-        case 2 when second?.value == 2 && second?.key != _CamelCard.joker.value:
-        case 1 when first.value == 3:
-          return _HandType.fourOfAKind;
-        // Full house cases
-        case 1
-            when first.value == 3 &&
-                second?.value == 1 &&
-                second?.key != _CamelCard.joker.value:
-        case 1 when first.value == 2 && second?.value == 2:
-          return _HandType.fullHouse;
-        // Three of a kind cases
-        case 1 when first.value == 2:
-        case 2 when second?.value == 1:
-          return _HandType.threeOfAKind;
-        // No two pair cases
-        // One pair cases
-        case 1 when first.value == 1 && first.key != _CamelCard.joker.value:
-        case 1 when second?.value == 1 && second?.key != _CamelCard.joker.value:
-          return _HandType.onePair;
-      }
+    final jokers = counts[_CamelCard.joker.value] ?? 0;
+    switch (jokers) {
+      // Five of a kind cases
+      case 5:
+      case 4:
+      case 3 when second?.value == 2:
+      case 2 when first.value == 3:
+      case 1 when first.value == 4:
+        return _HandType.fiveOfAKind;
+      // Four of a kind cases
+      case 3 when second?.value == 1:
+      case 2 when first.value == 2 && first.key != _CamelCard.joker.value:
+      case 2 when second?.value == 2 && second?.key != _CamelCard.joker.value:
+      case 1 when first.value == 3:
+        return _HandType.fourOfAKind;
+      // Full house cases
+      case 1
+          when first.value == 3 &&
+              second?.value == 1 &&
+              second?.key != _CamelCard.joker.value:
+      case 1 when first.value == 2 && second?.value == 2:
+        return _HandType.fullHouse;
+      // Three of a kind cases
+      case 1 when first.value == 2:
+      case 2 when second?.value == 1:
+        return _HandType.threeOfAKind;
+      // No two pair cases
+      // One pair cases
+      case 1 when first.value == 1 && first.key != _CamelCard.joker.value:
+      case 1 when second?.value == 1 && second?.key != _CamelCard.joker.value:
+        return _HandType.onePair;
+    }
 
-      switch (first.value) {
-        case 5:
-          return _HandType.fiveOfAKind;
-        case 4:
-          return _HandType.fourOfAKind;
-        case 3 when second?.value == 2:
-          return _HandType.fullHouse;
-        case 3:
-          return _HandType.threeOfAKind;
-        case 2 when second?.value == 2:
-          return _HandType.twoPair;
-        case 2:
-          return _HandType.onePair;
-        default:
-          return _HandType.highCard;
-      }
-    } catch (e) {
-      print('Error parsing hand: $hand');
-      rethrow;
+    switch (first.value) {
+      case 5:
+        return _HandType.fiveOfAKind;
+      case 4:
+        return _HandType.fourOfAKind;
+      case 3 when second?.value == 2:
+        return _HandType.fullHouse;
+      case 3:
+        return _HandType.threeOfAKind;
+      case 2 when second?.value == 2:
+        return _HandType.twoPair;
+      case 2:
+        return _HandType.onePair;
+      default:
+        return _HandType.highCard;
     }
   }
 
@@ -159,19 +144,10 @@ enum _CamelCard {
   const _CamelCard(this.string, this.value);
 
   factory _CamelCard.parse(String string, {bool jAsJoker = false}) {
-    if (string == 'J' && jAsJoker) {
-      return _CamelCard.joker;
-    }
-
-    return _CamelCard.values.firstWhere(
-      (e) => e.string == string,
-      orElse: () => throw ArgumentError('Invalid card: $string'),
-    );
+    if (string == 'J' && jAsJoker) return _CamelCard.joker;
+    return _CamelCard.values.firstWhere((e) => e.string == string);
   }
 
   final String string;
   final int value;
-
-  @override
-  String toString() => string;
 }
