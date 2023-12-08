@@ -45,14 +45,16 @@ class Day08 extends GenericDay {
     final record = parseInput();
     int operationCount = 0;
 
-    List<String> keys = record.map.keys.where((e) => e.endsWith('A')).toList();
+    final keys = record.map.keys.where((e) => e.endsWith('A')).toList();
     while (!keys.every((key) => key.endsWith('Z'))) {
       final direction =
           record.instructions[operationCount % record.instructions.length];
-      final nodes = keys.map((key) => record.map[key]!).toList();
-      keys = nodes
-          .map((node) => direction == _Direction.left ? node.left : node.right)
-          .toList();
+
+      for (int i = 0; i < keys.length; i++) {
+        final key = keys[i];
+        final node = record.map[key]!;
+        keys[i] = direction == _Direction.left ? node.left : node.right;
+      }
 
       operationCount++;
     }
