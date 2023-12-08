@@ -43,23 +43,30 @@ class Day08 extends GenericDay {
   @override
   int solvePart2() {
     final record = parseInput();
-    int operationCount = 0;
-
     final keys = record.map.keys.where((e) => e.endsWith('A')).toList();
-    while (!keys.every((key) => key.endsWith('Z'))) {
-      final direction =
-          record.instructions[operationCount % record.instructions.length];
+    final allOperations = <BigInt>[];
 
-      for (int i = 0; i < keys.length; i++) {
-        final key = keys[i];
-        final node = record.map[key]!;
-        keys[i] = direction == _Direction.left ? node.left : node.right;
+    for (final key in keys) {
+      int operationCount = 0;
+      String currentNode = key;
+
+      while (!currentNode.endsWith('Z')) {
+        final direction =
+            record.instructions[operationCount % record.instructions.length];
+        currentNode = switch (direction) {
+          _Direction.left => record.map[currentNode]!.left,
+          _Direction.right => record.map[currentNode]!.right,
+        };
+        operationCount++;
       }
-
-      operationCount++;
+      allOperations.add(BigInt.from(operationCount));
     }
 
-    return operationCount;
+    BigInt sum = BigInt.from(1);
+    for (final step in allOperations) {
+      sum *= step ~/ sum.gcd(step);
+    }
+    return sum.toInt();
   }
 }
 
