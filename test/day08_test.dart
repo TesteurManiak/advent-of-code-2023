@@ -22,9 +22,10 @@ void main() {
     });
 
     group('solvePart2', () {
-      const expectedOutput = 0;
+      const expectedOutput = 6;
 
       test('returns $expectedOutput', () {
+        day.input.inputAsList = readInputAsLines('aoc08-3.txt');
         expect(day.solvePart2(), expectedOutput);
       });
     });

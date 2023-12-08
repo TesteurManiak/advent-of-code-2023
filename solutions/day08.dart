@@ -29,8 +29,6 @@ class Day08 extends GenericDay {
     final record = parseInput();
     int operationCount = 0;
 
-    // Starting from key AAA, follow the instructions to find the next key
-    // until we reach ZZZ.
     String key = 'AAA';
     while (key != 'ZZZ') {
       final node = record.map[key]!;
@@ -44,7 +42,22 @@ class Day08 extends GenericDay {
 
   @override
   int solvePart2() {
-    return 0;
+    final record = parseInput();
+    int operationCount = 0;
+
+    List<String> keys = record.map.keys.where((e) => e.endsWith('A')).toList();
+    while (!keys.every((key) => key.endsWith('Z'))) {
+      final direction =
+          record.instructions[operationCount % record.instructions.length];
+      final nodes = keys.map((key) => record.map[key]!).toList();
+      keys = nodes
+          .map((node) => direction == _Direction.left ? node.left : node.right)
+          .toList();
+
+      operationCount++;
+    }
+
+    return operationCount;
   }
 }
 
