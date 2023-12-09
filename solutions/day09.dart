@@ -20,8 +20,7 @@ class Day09 extends GenericDay {
 
   List<List<int>> _findExtrapolations(List<int> history) {
     final extrapolations = <List<int>>[history];
-    int y = 0;
-    while (y < extrapolations.length) {
+    for (int y = 0; y < extrapolations.length; y++) {
       final currentLine = extrapolations[y];
       final differences = <int>[];
       for (int i = 1; i < currentLine.length; i++) {
@@ -30,7 +29,6 @@ class Day09 extends GenericDay {
       }
       extrapolations.add(differences);
       if (differences.every((e) => e == 0)) break;
-      y++;
     }
     return extrapolations;
   }
