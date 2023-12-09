@@ -10,9 +10,10 @@ class Day09 extends GenericDay {
   }) sync* {
     final lines = input.getPerLine();
     for (final line in lines) {
-      final regex = RegExp(r'(-?\d+)');
-      final match =
-          regex.allMatches(line).map((m) => int.parse(m.group(0)!)).toList();
+      final match = RegExp(r'(-?\d+)')
+          .allMatches(line)
+          .map((m) => int.parse(m.group(0)!))
+          .toList();
       yield match;
     }
   }
@@ -41,17 +42,14 @@ class Day09 extends GenericDay {
 
     for (final history in histories) {
       final extrapolations = _findExtrapolations(history);
-
       extrapolations.last.add(0);
       for (int i = extrapolations.length - 2; i >= 0; i--) {
         final previousLine = extrapolations[i + 1];
         final currentLine = extrapolations[i];
         currentLine.add(currentLine.last + previousLine.last);
       }
-
       sum += extrapolations.first.last;
     }
-
     return sum;
   }
 
@@ -62,16 +60,13 @@ class Day09 extends GenericDay {
 
     for (final history in histories) {
       final extrapolations = _findExtrapolations(history);
-
       for (int i = extrapolations.length - 2; i >= 0; i--) {
         final previousLine = extrapolations[i + 1];
         final currentLine = extrapolations[i];
         currentLine.insert(0, currentLine.first - previousLine.first);
       }
-
       sum += extrapolations.first.first;
     }
-
     return sum;
   }
 }
